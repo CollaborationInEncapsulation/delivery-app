@@ -1,0 +1,10 @@
+###
+PATCH http://localhost:8082/api/cart
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJub25lIn0.eyJzdWIiOiJ1c2VyIiwiaXNzIjoiR2F0ZXdheSBTZXJ2aWNlIiwianRpIjoiNmIxMmNiMDEtZmJkYi00ZDFlLTllYTgtMTY0MzZhMDhjZGQxIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl19.
+cookie: JSESSIONID=F502B893D6A5F74D58F2E927B997BE41
+
+{
+  "productId": "7569071b-715d-4042-9efb-1d96fd1791d0",
+  "quantity": "2"
+}

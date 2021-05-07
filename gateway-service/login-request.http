@@ -1,0 +1,30 @@
+GET http://localhost:8080/login
+
+//Saving a variable
+> {%
+    client.global.set("csrf", response.body.toString().match(/name="_csrf"\n?.*value="([^"]*)"/gm)[0].replace('name="_csrf" value="', '').replace("\"", ''));
+%}
+
+###
+POST http://localhost:8080/login
+Content-Type: application/x-www-form-urlencoded
+
+_csrf={{csrf}}&username=user&password=password
+
+> {%
+    client.global.set("csrf", response.body.toString().match(/name="_csrf"\n?.*value="([^"]*)"/gm)[0].replace('name="_csrf" value="', '').replace("\"", ''));
+%}
+
+###
+PATCH http://localhost:8080/api/cart
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf}}
+
+{
+  "productId": "7569071b-715d-4042-9efb-1d96fd1791d0",
+  "quantity": "1"
+}
+
+###
+GET http://localhost:8080/api/cart
+Content-Type: application/json

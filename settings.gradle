@@ -1,0 +1,14 @@
+rootProject.name = 'delivery-app'
+
+include 'commons'
+
+include 'cart-service'
+include 'cart-service-idl'
+
+include 'catalog-service'
+include 'catalog-service-idl'
+
+include 'user-service'
+include 'user-service-idl'
+
+include 'gateway-service'
