@@ -1,5 +1,6 @@
+TRUNCATE TABLE PRODUCTS;
 INSERT INTO PRODUCTS
-VALUES (RANDOM_UUID(),
+VALUES ('109c97e6-71a2-4ef6-b111-52db1cad9f4e',
         'product1',
         'Some test description for product 1',
         'testImageLink',
@@ -7,7 +8,7 @@ VALUES (RANDOM_UUID(),
         'USD',
         true);
 INSERT INTO PRODUCTS
-VALUES (RANDOM_UUID(),
+VALUES ('109c97e6-71a2-4ef6-b111-52db1cad9f2e',
         'product2',
         'Some test description for product 2',
         'testImageLink',

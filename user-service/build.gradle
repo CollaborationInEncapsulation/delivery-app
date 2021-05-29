@@ -2,10 +2,14 @@ apply plugin: 'org.springframework.boot'
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-rsocket'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
 
-    runtimeOnly("com.h2database:h2")
+    implementation 'org.springframework.security:spring-security-messaging'
+    implementation 'org.springframework.security:spring-security-rsocket'
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'io.r2dbc:r2dbc-h2'
 
     implementation project(':user-service-idl')
     implementation project(':commons')

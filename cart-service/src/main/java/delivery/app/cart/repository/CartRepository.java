@@ -19,5 +19,4 @@ public class CartRepository {
   public Cart removeIfPresent(String cartId) {
     return this.carts.remove(cartId);
   }
-
 }

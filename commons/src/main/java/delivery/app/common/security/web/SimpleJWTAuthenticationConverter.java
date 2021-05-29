@@ -18,33 +18,45 @@ package delivery.app.common.security.web;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import io.netty.buffer.ByteBuf;
+import io.rsocket.metadata.CompositeMetadata;
+import reactor.core.publisher.Mono;
+
+import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.http.HttpHeaders;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.web.authentication.AuthenticationConverter;
+import org.springframework.security.rsocket.api.PayloadExchange;
+import org.springframework.security.rsocket.authentication.PayloadExchangeAuthenticationConverter;
+import org.springframework.security.rsocket.metadata.BearerTokenMetadata;
 
-public class SimpleJWTAuthenticationConverter implements AuthenticationConverter {
+public class SimpleJWTAuthenticationConverter implements PayloadExchangeAuthenticationConverter {
+
+  private static final String BEARER_MIME_TYPE_VALUE =
+          BearerTokenMetadata.BEARER_AUTHENTICATION_MIME_TYPE.toString();
 
   @Override
-  public Authentication convert(HttpServletRequest request) {
-    final String header = request.getHeader(HttpHeaders.AUTHORIZATION);
+  public Mono<Authentication> convert(PayloadExchange exchange) {
+    ByteBuf metadata = exchange.getPayload().metadata();
+    CompositeMetadata compositeMetadata = new CompositeMetadata(metadata, false);
 
-    if (header == null || !header.startsWith("Bearer ")) {
-      return null;
+    for (CompositeMetadata.Entry entry : compositeMetadata) {
+      if (BEARER_MIME_TYPE_VALUE.equals(entry.getMimeType())) {
+        ByteBuf content = entry.getContent();
+        String token = content.toString(StandardCharsets.UTF_8);
+        final DecodedJWT decodedJWT = JWT.decode(token);
+
+        return Mono.just(new UsernamePasswordAuthenticationToken(decodedJWT.getSubject(),
+                null,
+                decodedJWT.getClaim("authorities")
+                          .asList(String.class)
+                          .stream()
+                          .map(SimpleGrantedAuthority::new)
+                          .collect(Collectors.toList())));
+      }
     }
-
-    String authToken = header.substring(7);
-
-    final DecodedJWT decodedJWT = JWT.decode(authToken);
-
-    return new UsernamePasswordAuthenticationToken(
-        decodedJWT.getSubject(),
-        null,
-        decodedJWT.getClaim("authorities").asList(String.class).stream()
-            .map(SimpleGrantedAuthority::new).collect(Collectors.toList())
-    );
+    return Mono.empty();
   }
 }

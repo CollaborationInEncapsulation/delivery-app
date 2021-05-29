@@ -11,4 +11,7 @@ include 'catalog-service-idl'
 include 'user-service'
 include 'user-service-idl'
 
+//include 'order-service'
+//include 'order-service-idl'
+
 include 'gateway-service'
