@@ -1,15 +1,16 @@
 package delivery.app.user;
 
 import delivery.app.user.dto.Product;
-import java.util.List;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface CatalogService {
 
-  Product find(String productId);
+  Mono<Product> find(String productId);
 
-  List<Product> findAll();
+  Flux<Product> findAll();
 
-  boolean exist(String productId);
+  Mono<Void> exist(String productId);
 
-  void update(String productId, Product product);
+  Mono<Void> update(String productId, Product product);
 }

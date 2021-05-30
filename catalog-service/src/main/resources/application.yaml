@@ -1,13 +1,9 @@
-server:
-  port: 8083
-
-
 spring:
-  datasource:
-    data: classpath:sql/data.sql
-    schema: classpath:sql/schema.sql
-    url: jdbc:h2:file:./build/data/productsdb
-    driverClassName: org.h2.Driver
+  rsocket:
+    server:
+      transport: tcp
+      port: 8083
+  r2dbc:
+    url: r2dbc:h2:file:///./build/data/productsdb;USER=sa;PASSWORD=password
     username: sa
     password: password
-    initialization-mode: always

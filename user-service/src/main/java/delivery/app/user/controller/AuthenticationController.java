@@ -13,13 +13,13 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
 
 @Controller
-@MessageMapping("api.authenticate")
+@MessageMapping("api")
 @AllArgsConstructor
 public class AuthenticationController {
 
   final AuthenticationService authenticationService;
 
-  @MessageMapping
+  @MessageMapping("authenticate")
   public Mono<Collection<Authority>> authenticate(@Payload UsernameAndPassword userAndPassword) {
     return authenticationService.authenticate(userAndPassword.getUsername(), userAndPassword.getPassword());
   }

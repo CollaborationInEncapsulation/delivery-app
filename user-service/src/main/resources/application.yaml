@@ -1,16 +1,13 @@
-server:
-  port: 8081
-
-
 spring:
-  datasource:
-    schema: classpath:sql/schema.sql
-    data: classpath:sql/data.sql
-    url: jdbc:h2:file:./build/data/usersdb
-    driverClassName: org.h2.Driver
+  rsocket:
+    server:
+      transport: tcp
+      port: 8081
+  r2dbc:
+    url: r2dbc:h2:file:///./build/data/usersdb;USER=sa;PASSWORD=password
     username: sa
     password: password
-    initialization-mode: always
+
 logging:
   pattern:
     console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%7.7X{actor}]){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"

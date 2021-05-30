@@ -17,19 +17,15 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 public abstract class CommonRSocketSecurityConfigurerAdapter {
 
-  // @formatter:off
   @Bean
-  public PayloadSocketAcceptorInterceptor rsocketInterceptor(RSocketSecurity rsocket, ReactiveAuthenticationManager reactiveAuthenticationManager) {
-    AuthenticationPayloadInterceptor interceptor =
-            new AuthenticationPayloadInterceptor(reactiveAuthenticationManager);
-
+  public PayloadSocketAcceptorInterceptor rsocketInterceptor(RSocketSecurity rsocket, ReactiveAuthenticationManager manager) {
+    AuthenticationPayloadInterceptor interceptor = new AuthenticationPayloadInterceptor(manager);
     interceptor.setAuthenticationConverter(new SimpleJWTAuthenticationConverter());
 
     rsocket.addPayloadInterceptor(interceptor);
 
     return rsocket.build();
   }
-  // @formatter:on
 
   protected abstract void doConfigure(RSocketSecurity rsocket) throws Exception;
 

@@ -29,6 +29,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
                            if (user != null && passwordEncoder.matches(password, user.getEncodedPassword())) {
                              sink.next(Arrays.stream(user.getAuthorities().split(",")).map(Authority::new)
                                           .collect(Collectors.toSet()));
+                             return;
                            }
 
                            sink.error(new BadCredentialsException("Given username or password are incorrect"));
