@@ -1,4 +1,4 @@
-package delivery.app.common.security.web.client;
+package delivery.app.common.security.rsocket.requester;
 
 import java.util.UUID;
 import java.util.stream.Collectors;

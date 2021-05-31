@@ -1,11 +1,13 @@
 package delivery.app.user;
 
 import delivery.app.user.dto.User;
+import java.util.Collection;
 import java.util.List;
+import reactor.core.publisher.Mono;
 
 public interface UserService {
 
-  User find(String username);
+  Mono<User> find(String username);
 
-  List<User> findAll();
+  Mono<Collection<User>> findAll();
 }

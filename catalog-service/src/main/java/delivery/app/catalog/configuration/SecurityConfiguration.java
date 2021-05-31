@@ -1,6 +1,6 @@
 package delivery.app.catalog.configuration;
 
-import delivery.app.common.security.web.CommonRSocketSecurityConfigurerAdapter;
+import delivery.app.common.security.rsocket.CommonRSocketSecurityConfigurerAdapter;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;

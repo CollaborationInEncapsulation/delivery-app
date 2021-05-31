@@ -1,4 +1,4 @@
-package delivery.app.user.dto;
+package delivery.app.catalog.dto;
 
 import java.math.BigDecimal;
 import java.util.Currency;

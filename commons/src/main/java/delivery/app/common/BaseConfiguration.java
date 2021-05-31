@@ -1,7 +1,12 @@
 package delivery.app.common;
 
-import delivery.app.common.security.web.client.JWTMetadataRSocketConnectorConfigurer;
+import delivery.app.common.security.rsocket.requester.JWTMetadataRSocketConnectorConfigurer;
+import io.rsocket.core.RSocketServer;
 import io.rsocket.transport.netty.server.TcpServerTransport;
+import org.springframework.boot.autoconfigure.rsocket.RSocketMessageHandlerCustomizer;
+import org.springframework.boot.rsocket.server.RSocketServerCustomizer;
+import org.springframework.messaging.rsocket.annotation.support.RSocketMessageHandler;
+import org.springframework.security.messaging.handler.invocation.reactive.AuthenticationPrincipalArgumentResolver;
 import reactor.netty.http.server.HttpServer;
 
 import org.springframework.beans.factory.ObjectProvider;
@@ -24,14 +29,20 @@ public class BaseConfiguration {
   @Bean
   @Scope("prototype")
   @ConditionalOnClass({RSocketRequester.class, io.rsocket.RSocket.class, HttpServer.class,
-          TcpServerTransport.class})
+      TcpServerTransport.class})
   public RSocketRequester.Builder rSocketRequesterBuilder(RSocketStrategies strategies,
-          ObjectProvider<RSocketConnectorConfigurer> rSocketConnectorConfigurers) {
+      ObjectProvider<RSocketConnectorConfigurer> rSocketConnectorConfigurers) {
     RSocketRequester.Builder builder = RSocketRequester.builder()
-                                                       .rsocketStrategies(strategies);
+        .rsocketStrategies(strategies);
 
     rSocketConnectorConfigurers.forEach(builder::rsocketConnector);
 
     return builder;
+  }
+
+  @Bean
+  public RSocketMessageHandlerCustomizer rSocketMessageHandlerCustomizer() {
+    return messageHandler -> messageHandler.getArgumentResolverConfigurer()
+        .addCustomResolver(new AuthenticationPrincipalArgumentResolver());
   }
 }

@@ -1,6 +1,7 @@
-package delivery.app.user;
+package delivery.app.catalog;
 
-import delivery.app.user.dto.Product;
+import delivery.app.catalog.dto.Product;
+import java.util.Collection;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -8,7 +9,7 @@ public interface CatalogService {
 
   Mono<Product> find(String productId);
 
-  Flux<Product> findAll();
+  Mono<Collection<Product>> findAll();
 
   Mono<Void> exist(String productId);
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package delivery.app.common.security.web;
+package delivery.app.common.security.rsocket;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;

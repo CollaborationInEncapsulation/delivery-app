@@ -1,2 +1,5 @@
-server:
-  port: 8082
+spring:
+  rsocket:
+    server:
+      transport: tcp
+      port: 8082

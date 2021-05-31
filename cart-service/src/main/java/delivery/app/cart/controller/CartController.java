@@ -4,27 +4,27 @@ import delivery.app.user.CartService;
 import delivery.app.user.dto.Cart;
 import delivery.app.user.dto.Item;
 import lombok.AllArgsConstructor;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
+import reactor.core.publisher.Mono;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
-@RequestMapping("/api/cart")
+@Controller
+@MessageMapping("api.cart")
 @AllArgsConstructor
 public class CartController {
 
   final CartService cartService;
 
-  @GetMapping
-  public Cart get() {
-    return cartService.get();
+  @MessageMapping("")
+  public Cart get(@AuthenticationPrincipal String user) {
+    return cartService.get(user);
   }
 
-  @PatchMapping
-  public void patch(@RequestBody Item item) {
-    cartService.update(item);
+  @MessageMapping("patch")
+  public Mono<Void> patch(@Payload Item item, @AuthenticationPrincipal String user) {
+    return cartService.update(user, item);
   }
 }

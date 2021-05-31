@@ -1,6 +1,6 @@
 package delivery.app.user.configuration;
 
-import delivery.app.common.security.web.CommonRSocketSecurityConfigurerAdapter;
+import delivery.app.common.security.rsocket.CommonRSocketSecurityConfigurerAdapter;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

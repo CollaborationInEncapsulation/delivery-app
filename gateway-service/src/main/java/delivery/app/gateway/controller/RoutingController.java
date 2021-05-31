@@ -3,6 +3,8 @@ package delivery.app.gateway.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -35,9 +37,9 @@ public class RoutingController {
             rsocketRequestersMap.put(service, rsocketRequesterBuilder.tcp("localhost", port)));
   }
 
-  @RequestMapping("/api/{servicePath}")
-  public ResponseEntity<Flux<DataBuffer>> handle(@PathVariable("servicePath") String servicePath,
-          HttpEntity<Mono<DataBuffer>> httpEntity) {
+  @RequestMapping(value = "/api/{servicePath}")
+  public ResponseEntity<Mono<DataBuffer>> handle(@PathVariable("servicePath") String servicePath,
+          HttpEntity<Mono<DataBuffer>> httpEntity, HttpMethod httpMethod) {
 
     return rsocketRequestersMap
             .keySet()
@@ -45,9 +47,9 @@ public class RoutingController {
             .filter(servicePath::startsWith)
             .findFirst()
             .map(rsocketRequestersMap::get)
-            .map(requester -> requester.route("api.{servicePath}", servicePath.replace('/', '.'))
+            .map(requester -> requester.route("api.{servicePath}" + (httpMethod == HttpMethod.PATCH ? ".patch" : ""), servicePath.replace('/', '.'))
                                        .data(httpEntity.getBody() == null ? Mono.empty() : httpEntity.getBody())
-                                       .retrieveFlux(DataBuffer.class))
+                                       .retrieveMono(DataBuffer.class))
             .map(body -> ResponseEntity.ok().body(body))
             .orElse(ResponseEntity.notFound().build());
   }

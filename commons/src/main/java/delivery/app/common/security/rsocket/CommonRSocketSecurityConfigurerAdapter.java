@@ -1,19 +1,12 @@
-package delivery.app.common.security.web;
+package delivery.app.common.security.rsocket;
 
 import reactor.core.publisher.Mono;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.rsocket.RSocketSecurity;
-import org.springframework.security.config.annotation.rsocket.RSocketSecurity.AuthorizePayloadsSpec;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.rsocket.api.PayloadInterceptor;
 import org.springframework.security.rsocket.authentication.AuthenticationPayloadInterceptor;
 import org.springframework.security.rsocket.core.PayloadSocketAcceptorInterceptor;
-import org.springframework.security.web.authentication.AuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 public abstract class CommonRSocketSecurityConfigurerAdapter {
 

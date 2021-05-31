@@ -1,15 +1,14 @@
 package delivery.app.catalog.controller;
 
-import delivery.app.user.CatalogService;
-import delivery.app.user.dto.Product;
-
+import delivery.app.catalog.CatalogService;
+import delivery.app.catalog.dto.Product;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Controller;
+import reactor.core.publisher.Mono;
 
 @Controller
 @MessageMapping("api.products")
@@ -19,17 +18,17 @@ public class CatalogController {
   final CatalogService catalogService;
 
   @MessageMapping("")
-  public Flux<Product> list() {
+  public Mono<Collection<Product>> list() {
     return catalogService.findAll();
   }
 
-  @MessageMapping("find")
-  public Mono<Product> find(@Payload String productId) {
+  @MessageMapping("{productId}")
+  public Mono<Product> find(@DestinationVariable("productId") String productId) {
     return catalogService.find(productId);
   }
 
-  @MessageMapping("exist")
-  public Mono<Void> exist(@Payload String productId) {
+  @MessageMapping("{productId}.exist")
+  public Mono<Void> exist(@DestinationVariable("productId") String productId) {
     return catalogService.exist(productId);
   }
 }

@@ -21,7 +21,7 @@ Content-Type: application/json
 X-CSRF-TOKEN: {{csrf}}
 
 {
-  "productId": "109c97e6-71a2-4ef6-b111-52db1cad9f4e",
+  "productId": "438a3ace-4605-4e8c-9534-a637da526369d",
   "quantity": "1"
 }
 
