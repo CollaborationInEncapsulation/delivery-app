@@ -1,8 +1,6 @@
 package delivery.app.user.repository.model;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +14,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @Builder
 @Table("USERS")
-public class User {
+public class UserModel {
 
   @Id
   String id;

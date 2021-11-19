@@ -1,5 +1,7 @@
+DELETE FROM PRODUCTS;
+
 INSERT INTO PRODUCTS
-VALUES (RANDOM_UUID(),
+VALUES ('1',
         'product1',
         'Some test description for product 1',
         'testImageLink',
@@ -7,7 +9,7 @@ VALUES (RANDOM_UUID(),
         'USD',
         true);
 INSERT INTO PRODUCTS
-VALUES (RANDOM_UUID(),
+VALUES ('2',
         'product2',
         'Some test description for product 2',
         'testImageLink',

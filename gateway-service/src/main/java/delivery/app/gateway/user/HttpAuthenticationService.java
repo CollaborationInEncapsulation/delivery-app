@@ -1,19 +1,17 @@
 package delivery.app.gateway.user;
 
-import delivery.app.user.AuthenticationService;
+import delivery.app.user.AuthenticationServiceApi;
 import delivery.app.user.dto.Authority;
 import delivery.app.user.dto.UsernameAndPassword;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.core.ResolvableType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-class HttpAuthenticationService implements AuthenticationService {
+class HttpAuthenticationService implements AuthenticationServiceApi {
 
   final RestTemplate restTemplate;
 

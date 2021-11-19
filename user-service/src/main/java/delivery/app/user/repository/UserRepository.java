@@ -1,9 +1,9 @@
 package delivery.app.user.repository;
 
-import delivery.app.user.repository.model.User;
+import delivery.app.user.repository.model.UserModel;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<User, String> {
+public interface UserRepository extends CrudRepository<UserModel, String> {
 
-  User findByName(String username);
+  UserModel findByName(String username);
 }

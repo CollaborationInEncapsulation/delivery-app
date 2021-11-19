@@ -1,6 +1,6 @@
 package delivery.app.gateway.security;
 
-import delivery.app.user.AuthenticationService;
+import delivery.app.user.AuthenticationServiceApi;
 import delivery.app.user.dto.Authority;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -14,9 +14,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 public class RemoteAuthenticationManager implements AuthenticationManager {
 
-  final AuthenticationService authenticationService;
+  final AuthenticationServiceApi authenticationService;
 
-  public RemoteAuthenticationManager(AuthenticationService authenticationService) {
+  public RemoteAuthenticationManager(AuthenticationServiceApi authenticationService) {
     this.authenticationService = authenticationService;
   }
 

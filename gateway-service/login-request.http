@@ -16,13 +16,44 @@ _csrf={{csrf}}&username=user&password=password
 %}
 
 ###
+GET http://localhost:8080/api/users/me
+
+###
 PATCH http://localhost:8080/api/cart
 Content-Type: application/json
 X-CSRF-TOKEN: {{csrf}}
 
 {
-  "productId": "7569071b-715d-4042-9efb-1d96fd1791d0",
+  "productId": "1",
   "quantity": "1"
+}
+
+###
+GET http://localhost:8080/api/cart
+Content-Type: application/json
+
+###
+PATCH http://localhost:8080/api/cart
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf}}
+
+{
+  "productId": "2",
+  "quantity": "2"
+}
+
+###
+GET http://localhost:8080/api/cart
+Content-Type: application/json
+
+###
+PATCH http://localhost:8080/api/cart
+Content-Type: application/json
+X-CSRF-TOKEN: {{csrf}}
+
+{
+  "productId": "2",
+  "quantity": "-1"
 }
 
 ###

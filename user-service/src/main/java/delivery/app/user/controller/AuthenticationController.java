@@ -1,8 +1,8 @@
 package delivery.app.user.controller;
 
-import delivery.app.user.AuthenticationService;
 import delivery.app.user.dto.Authority;
 import delivery.app.user.dto.UsernameAndPassword;
+import delivery.app.user.service.AuthenticationService;
 import java.util.Collection;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +23,7 @@ public class AuthenticationController {
   }
 
   @PostMapping
+
   public ResponseEntity<?> authenticate(@RequestBody UsernameAndPassword userAndPassword) {
     try {
       final Collection<Authority> authorities = authenticationService

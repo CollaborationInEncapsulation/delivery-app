@@ -1,10 +1,8 @@
 package delivery.app.user.service;
 
-import delivery.app.user.AuthenticationService;
 import delivery.app.user.dto.Authority;
 import delivery.app.user.repository.UserRepository;
-import delivery.app.user.repository.model.User;
-import java.time.LocalDateTime;
+import delivery.app.user.repository.model.UserModel;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -26,7 +24,7 @@ public class DefaultAuthenticationService implements AuthenticationService {
 
   @Override
   public Collection<Authority> authenticate(String username, CharSequence password) {
-    final User user = userRepository.findByName(username);
+    final UserModel user = userRepository.findByName(username);
 
     if (user != null && passwordEncoder.matches(password, user.getEncodedPassword())) {
       return Arrays.stream(user.getAuthorities().split(",")).map(Authority::new)

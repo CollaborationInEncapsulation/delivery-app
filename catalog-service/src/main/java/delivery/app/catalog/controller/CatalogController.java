@@ -1,6 +1,6 @@
 package delivery.app.catalog.controller;
 
-import delivery.app.user.CatalogService;
+import delivery.app.catalog.service.CatalogService;
 import delivery.app.user.dto.Product;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class CatalogController {
   final CatalogService catalogService;
 
   @GetMapping
-  public List<Product> list() {
+  public List<Product> findAll() {
     return catalogService.findAll();
   }
 
@@ -33,6 +33,11 @@ public class CatalogController {
     return catalogService.exist(productId)
         ? ResponseEntity.ok().build()
         : ResponseEntity.notFound().build();
+  }
+
+  @RequestMapping(value = "/{id}", method = RequestMethod.PATCH)
+  public void update(@PathVariable("id") String productId, Product product) {
+
   }
 
 }

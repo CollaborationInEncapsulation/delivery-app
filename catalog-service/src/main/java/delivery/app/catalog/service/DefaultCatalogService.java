@@ -1,7 +1,6 @@
 package delivery.app.catalog.service;
 
 import delivery.app.catalog.repository.ProductRepository;
-import delivery.app.user.CatalogService;
 import delivery.app.user.dto.Product;
 import java.util.List;
 import java.util.stream.Collectors;

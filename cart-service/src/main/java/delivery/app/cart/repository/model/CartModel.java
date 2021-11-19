@@ -8,21 +8,21 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-public class Cart {
+public class CartModel {
   final String id;
-  final ConcurrentMap<String, Item> items = new ConcurrentHashMap<>();
+  final ConcurrentMap<String, ItemModel> items = new ConcurrentHashMap<>();
 
   public boolean hasProduct(String productId) {
     return items.containsKey(productId);
   }
 
-  public void update(Item itemUpdate) {
+  public void update(ItemModel itemUpdate) {
     items.compute(itemUpdate.getProductId(), (key, item) -> {
       if (item != null) {
         final int nextQuantity = item.getQuantity() + itemUpdate.getQuantity();
 
         if (nextQuantity > 0) {
-          return new Item(key, nextQuantity);
+          return new ItemModel(key, nextQuantity);
         }
 
         return null;
@@ -32,7 +32,7 @@ public class Cart {
     });
   }
 
-  public Collection<Item> items() {
+  public Collection<ItemModel> items() {
     return items.values();
   }
 }

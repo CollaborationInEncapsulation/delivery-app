@@ -1,4 +1,4 @@
-package delivery.app.user;
+package delivery.app.catalog.service;
 
 import delivery.app.user.dto.Product;
 import java.util.List;

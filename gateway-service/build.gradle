@@ -10,6 +10,9 @@ dependencies {
     implementation project(':commons')
     implementation project(':user-service-idl')
 
+    testImplementation project(':user-service-idl')
+    testImplementation project(':cart-service-idl')
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'com.auth0:java-jwt:3.15.0'
 }

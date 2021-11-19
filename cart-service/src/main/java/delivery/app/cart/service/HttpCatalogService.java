@@ -1,6 +1,6 @@
 package delivery.app.cart.service;
 
-import delivery.app.user.CatalogService;
+import delivery.app.user.CatalogServiceApi;
 import delivery.app.user.dto.Product;
 import java.util.Arrays;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Service
-public class HttpCatalogService implements CatalogService {
+public class HttpCatalogService implements CatalogServiceApi {
 
   final RestTemplate restTemplate;
 
