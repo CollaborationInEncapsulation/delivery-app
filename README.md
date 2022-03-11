@@ -96,9 +96,16 @@ spring:
 
 At this step we will refactor completely to WebFlux but at the places where it is really needed!
 
-## Step 1.1 Refactor Gateway to WebFlux
+## Step 2.1 Refactor Gateway to WebFlux
 
 1. Remove WebMVC dependency from the service
+   > ***Note***: module `commons` may still bring an old WebMVC dependency.
+   > Exclude it from `gateway-service/build.gradle` using 
+   >  ```gradle
+   >    configurations.implementation  {
+   >       exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
+   >    } 
+   >  ```
 2. Rework Security Configuration to Support WebFlux Security. Replace the old `SecurityConfig` with
    the following one
     ```java
@@ -127,6 +134,16 @@ At this step we will refactor completely to WebFlux but at the places where it i
 3. Rebase `RemoteAuthenticationManger` to extend `ReactiveAuthenticationManager`
 4. Migrate `RoutingController` to use Reactive Types from end to end. Use `DataBuffer` class instead
    of `Resource`
+   ```java
+      public Mono<ResponseEntity<Flux<DataBuffer>>> handle(
+          @PathVariable("service") String service, 
+          @Nullable @PathVariable(value = "path", required = false) String path,
+          HttpEntity<Flux<DataBuffer>> httpEntity, 
+          HttpMethod httpMethod
+      ) {
+        // new impl
+      }
+   ```
 
 
 

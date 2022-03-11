@@ -42,8 +42,7 @@ public class ServiceIntegrationTest {
   @LocalServerPort
   int port;
 
-  @Autowired
-  RestTemplateBuilder restTemplateBuilder;
+  RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
 
   @Test
   void loginTest(WireMockRuntimeInfo wmRuntimeInfo) {
@@ -51,7 +50,9 @@ public class ServiceIntegrationTest {
         .build();
     final WireMock wireMock = wmRuntimeInfo.getWireMock();
     wireMock.register(WireMock.post("/api/authenticate")
-        .willReturn(aResponse().withBody("[{\"name\" : \"ROLE_ADMIN\"}]")));
+        .willReturn(aResponse()
+                .withHeader("Content-Type", "application/json")
+                .withBody("[{\"name\" : \"ROLE_ADMIN\"}]")));
 
     final ResponseEntity<String> getForCsrfResponse = testRestTemplate.getForEntity("/login",
         String.class);
@@ -81,7 +82,7 @@ public class ServiceIntegrationTest {
 
     assertThat(postForLoginResponse.getStatusCode().isError()).isFalse();
     assertThat(postForLoginResponse.getHeaders().get(HttpHeaders.SET_COOKIE)).anyMatch(
-        s -> s.contains("JSESSIONID"));
+        s -> s.contains("JSESSIONID") || s.contains("SESSION"));
 
     wireMock.verifyThat(1,
         postRequestedFor(urlEqualTo("/api/authenticate")).withRequestBody(
