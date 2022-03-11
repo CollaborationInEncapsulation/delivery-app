@@ -30,7 +30,7 @@ subprojects {
 		testImplementation 'org.assertj:assertj-core'
 	}
 
-	test {
+	tasks.named('test') {
 		useJUnitPlatform()
 	}
 }
