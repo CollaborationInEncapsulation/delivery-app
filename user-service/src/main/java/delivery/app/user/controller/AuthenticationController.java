@@ -1,12 +1,13 @@
 package delivery.app.user.controller;
 
-import delivery.app.user.dto.Authority;
+import java.util.function.Function;
+
 import delivery.app.user.dto.UsernameAndPassword;
 import delivery.app.user.service.AuthenticationService;
-import java.util.Collection;
+import reactor.core.publisher.Mono;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,14 +25,11 @@ public class AuthenticationController {
 
   @PostMapping
 
-  public ResponseEntity<?> authenticate(@RequestBody UsernameAndPassword userAndPassword) {
-    try {
-      final Collection<Authority> authorities = authenticationService
-          .authenticate(userAndPassword.getUsername(), userAndPassword.getPassword());
-
-      return ResponseEntity.ok(authorities);
-    } catch (BadCredentialsException e) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-    }
+  public Mono<ResponseEntity<?>> authenticate(@RequestBody UsernameAndPassword userAndPassword) {
+    return authenticationService
+          .authenticate(userAndPassword.getUsername(), userAndPassword.getPassword())
+          .map(ResponseEntity::<Object>ok)
+          .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage())))
+          .map(Function.identity());
   }
 }

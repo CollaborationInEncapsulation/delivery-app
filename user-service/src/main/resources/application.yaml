@@ -13,7 +13,10 @@ spring:
       mode: always
       data-locations: classpath:sql/data.sql
   r2dbc:
-    url: r2dbc:h2:file:./build/data/usersdb;USER=sa;PASSWORD=password
+    url: r2dbc:h2:file:///./build/data/usersdb
+    username: sa
+    password: password
+
 logging:
   pattern:
     console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:-yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%7.7X{actor}]){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}"

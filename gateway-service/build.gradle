@@ -3,7 +3,7 @@ apply plugin: 'org.springframework.boot'
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.apache.httpcomponents:httpclient'
 
@@ -15,4 +15,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'com.auth0:java-jwt:3.18.3'
+}
+
+configurations.implementation  {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
 }

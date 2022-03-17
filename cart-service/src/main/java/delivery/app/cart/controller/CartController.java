@@ -4,6 +4,8 @@ import delivery.app.cart.service.CartService;
 import delivery.app.user.dto.Cart;
 import delivery.app.user.dto.Item;
 import lombok.AllArgsConstructor;
+import reactor.core.publisher.Mono;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
@@ -28,7 +30,7 @@ public class CartController {
 
   @PatchMapping
   @PreAuthorize("hasRole('ROLE_USER')")
-  public void update(@RequestBody Item item, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
-    cartService.update(authentication.getName(), item);
+  public Mono<Void> update(@RequestBody Item item, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+    return cartService.update(authentication.getName(), item);
   }
 }

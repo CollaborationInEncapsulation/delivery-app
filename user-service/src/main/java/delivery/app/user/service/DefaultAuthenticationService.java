@@ -3,6 +3,9 @@ package delivery.app.user.service;
 import delivery.app.user.dto.Authority;
 import delivery.app.user.repository.UserRepository;
 import delivery.app.user.repository.model.UserModel;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -23,14 +26,21 @@ public class DefaultAuthenticationService implements AuthenticationService {
   }
 
   @Override
-  public Collection<Authority> authenticate(String username, CharSequence password) {
-    final UserModel user = userRepository.findByName(username);
+  public Mono<Collection<Authority>> authenticate(String username, CharSequence password) {
+    return userRepository
+            .findByName(username)
+            .publishOn(Schedulers.boundedElastic())
+            .handle((user, sink) -> {
+              if (user != null && passwordEncoder.matches(password, user.getEncodedPassword())) {
+                sink.next(
+                  Arrays.stream(user.getAuthorities().split(","))
+                        .map(Authority::new)
+                        .collect(Collectors.toSet())
+                );
+                return;
+              }
 
-    if (user != null && passwordEncoder.matches(password, user.getEncodedPassword())) {
-      return Arrays.stream(user.getAuthorities().split(",")).map(Authority::new)
-          .collect(Collectors.toSet());
-    }
-
-    throw new BadCredentialsException("Given username or password are incorrect");
+              sink.error(new BadCredentialsException("Given username or password are incorrect"));
+            });
   }
 }

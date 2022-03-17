@@ -1,13 +1,16 @@
 package delivery.app.cart.service;
 
+import java.util.stream.Collectors;
+
 import delivery.app.cart.repository.CartRepository;
 import delivery.app.cart.repository.model.CartModel;
 import delivery.app.cart.repository.model.ItemModel;
-import delivery.app.user.CatalogServiceApi;
+import delivery.app.user.ReactiveCatalogServiceApi;
 import delivery.app.user.dto.Cart;
 import delivery.app.user.dto.Item;
-import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import reactor.core.publisher.Mono;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -15,24 +18,22 @@ import org.springframework.stereotype.Service;
 public class DefaultCartService implements CartService {
 
   final CartRepository cartRepository;
-  final CatalogServiceApi catalogService;
+  final ReactiveCatalogServiceApi catalogService;
 
   @Override
-  public void update(String user, Item item) {
-    final CartModel cartModel = cartRepository.findOrCreate(user);
+  public Mono<Void> update(String user, Item item) {
+    return Mono.defer(() -> {
+      final CartModel cartModel = cartRepository.findOrCreate(user);
 
-    if (cartModel.hasProduct(item.getProductId())) {
-      cartModel.update(
-          new ItemModel(item.getProductId(), item.getQuantity()));
-      return;
-    }
+      if (cartModel.hasProduct(item.getProductId())) {
+        cartModel.update(new ItemModel(item.getProductId(), item.getQuantity()));
+        return Mono.empty();
+      }
 
-    if (catalogService.exist(item.getProductId())) {
-      cartModel.update(
-          new ItemModel(item.getProductId(), item.getQuantity()));
-    } else {
-      throw new IllegalArgumentException("Product with given id does not exist");
-    }
+      return catalogService.exist(item.getProductId())
+        .then(Mono.<Void>fromRunnable(() -> cartModel.update(new ItemModel(item.getProductId(), item.getQuantity()))))
+        .onErrorMap(t -> new IllegalArgumentException("Product with given id does not exist", t));
+    });
   }
 
   @Override

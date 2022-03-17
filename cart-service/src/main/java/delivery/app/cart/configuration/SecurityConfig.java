@@ -1,16 +1,15 @@
 package delivery.app.cart.configuration;
 
-import delivery.app.common.security.web.CommonWebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import delivery.app.common.security.web.CommonWebFluxSecurityConfigurerAdapter;
 
-@EnableWebSecurity
-public class SecurityConfig extends CommonWebSecurityConfigurerAdapter {
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+
+@EnableWebFluxSecurity
+public class SecurityConfig extends CommonWebFluxSecurityConfigurerAdapter {
 
   @Override
-  protected void doConfigure(HttpSecurity http) throws Exception {
-    http.authorizeRequests((authorize) -> authorize
-        .anyRequest().authenticated()
-    );
+  protected ServerHttpSecurity doConfigure(ServerHttpSecurity http) {
+    return http.authorizeExchange((authorize) -> authorize.anyExchange().authenticated());
   }
 }

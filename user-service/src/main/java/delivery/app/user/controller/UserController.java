@@ -2,13 +2,14 @@ package delivery.app.user.controller;
 
 import delivery.app.user.dto.User;
 import delivery.app.user.service.UserService;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import org.slf4j.MDC;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.CurrentSecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,7 +24,7 @@ public class UserController {
 
   @GetMapping
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public List<User> list(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+  public Flux<User> list(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
     MDC.put("actor", authentication.getName());
     try {
       return userService.findAll();
@@ -34,7 +35,7 @@ public class UserController {
 
   @GetMapping("/me")
   @PreAuthorize("isAuthenticated()")
-  public User find(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+  public Mono<User> find(@CurrentSecurityContext(expression = "authentication") Authentication authentication) {
     MDC.put("actor", authentication.getName());
     try {
       return userService.find(authentication.getName());
@@ -45,7 +46,7 @@ public class UserController {
 
   @GetMapping("/{username}")
   @PreAuthorize("hasRole('ROLE_ADMIN')")
-  public User find(@PathVariable("username") String username, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
+  public Mono<User> find(@PathVariable("username") String username, @CurrentSecurityContext(expression = "authentication") Authentication authentication) {
     MDC.put("actor", authentication.getName());
     try {
       return userService.find(username);

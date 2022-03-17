@@ -1,34 +1,36 @@
 package delivery.app.gateway.security;
 
-import delivery.app.user.AuthenticationServiceApi;
+import delivery.app.user.ReactiveAuthenticationServiceApi;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableWebFluxSecurity
+public class SecurityConfig {
 
-  // @formatter:off
-  @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  @Bean
+  SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
     http
-        .authorizeRequests((authorize) -> authorize
-            .antMatchers("/login").permitAll()
-            .antMatchers("/css/**", "/index").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/products", "/api/products/*").permitAll()
-            .anyRequest().authenticated()
-        )
-        .formLogin((formLogin) -> formLogin
-            .loginPage("/login")
-        );
+            .authorizeExchange((exchanges) ->
+                    exchanges
+                            .pathMatchers("/login").permitAll()
+                            .pathMatchers("/css/**", "/index").permitAll()
+                            .pathMatchers(HttpMethod.GET, "/api/products", "/api/products/*").permitAll()
+                            .anyExchange().authenticated()
+            )
+            .formLogin((formLogin) ->
+                    formLogin
+                            .loginPage("/login")
+            );
+    return http.build();
   }
-  // @formatter:on
 
   @Bean
   public RemoteAuthenticationManager remoteAuthenticationManager(
-      AuthenticationServiceApi authenticationService) {
+      ReactiveAuthenticationServiceApi authenticationService) {
     return new RemoteAuthenticationManager(authenticationService);
   }
 }

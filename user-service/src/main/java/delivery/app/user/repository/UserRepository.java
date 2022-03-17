@@ -1,9 +1,11 @@
 package delivery.app.user.repository;
 
 import delivery.app.user.repository.model.UserModel;
-import org.springframework.data.repository.CrudRepository;
+import reactor.core.publisher.Mono;
 
-public interface UserRepository extends CrudRepository<UserModel, String> {
+import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 
-  UserModel findByName(String username);
+public interface UserRepository extends ReactiveCrudRepository<UserModel, String> {
+
+  Mono<UserModel> findByName(String username);
 }

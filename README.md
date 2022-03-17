@@ -2,7 +2,7 @@
 
 ![Application Architecture](./system.png)
 
-# Gaols
+# Goals
 
 To learn how to properly refactor to reactive
 
@@ -86,7 +86,9 @@ with a new one:
 ```yaml
 spring:
   r2dbc:
-    url: r2dbc:h2:file:./build/data/usersdb;USER=sa;PASSWORD=password
+    url: r2dbc:h2:file:///./build/data/usersdb
+    username: sa
+    password: password
 ```
 
 > ***Remember***. The API should remain imperative on this Step.

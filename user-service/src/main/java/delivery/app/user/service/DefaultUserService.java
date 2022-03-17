@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,22 +21,25 @@ public class DefaultUserService implements UserService {
   final UserRepository userRepository;
 
   @Override
-  public User find(String username) {
-    final UserModel userModel = userRepository.findByName(username);
-
-    if (userModel == null) {
-      return null;
-    }
-
-    return new User(userModel.getName(), userModel.getEmail(), userModel.getAddress(),
-        userModel.getPhone());
+  public Mono<User> find(String username) {
+    return userRepository.findByName(username)
+        .map(userModel -> new User(
+                userModel.getName(),
+                userModel.getEmail(),
+                userModel.getAddress(),
+                userModel.getPhone()
+        ));
   }
 
   @Override
-  public List<User> findAll() {
+  public Flux<User> findAll() {
     log.info("Searching for all users");
-    return StreamSupport.stream(userRepository.findAll().spliterator(), false)
-        .map(userModel -> new User(userModel.getName(), userModel.getEmail(), userModel.getAddress(), userModel.getPhone()))
-        .collect(Collectors.toList());
+    return userRepository.findAll()
+        .map(userModel -> new User(
+                userModel.getName(),
+                userModel.getEmail(),
+                userModel.getAddress(),
+                userModel.getPhone()
+        ));
   }
 }

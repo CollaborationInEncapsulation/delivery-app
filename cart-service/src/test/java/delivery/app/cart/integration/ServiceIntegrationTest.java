@@ -16,6 +16,8 @@ import delivery.app.user.dto.Item;
 import java.util.Collections;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Hooks;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -40,6 +42,7 @@ public class ServiceIntegrationTest {
 
   @Test
   void retrieveAddToCartTest(WireMockRuntimeInfo wmRuntimeInfo) {
+    Hooks.onOperatorDebug();
     final RestTemplate testRestTemplate = restTemplateBuilder.rootUri("http://localhost:" + port)
         .build();
     final WireMock wireMock = wmRuntimeInfo.getWireMock();
