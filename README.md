@@ -2,7 +2,7 @@
 
 ![Application Architecture](./system.png)
 
-# Gaols
+# Goals
 
 To learn how to properly refactor to reactive
 
@@ -85,8 +85,10 @@ with a new one:
 
 ```yaml
 spring:
-  r2dbc:
-    url: r2dbc:h2:file:./build/data/usersdb;USER=sa;PASSWORD=password
+   r2dbc:
+      url: r2dbc:h2:file:///./build/data/usersdb
+      username: sa
+      password: password
 ```
 
 > ***Remember***. The API should remain imperative on this Step.
@@ -100,7 +102,7 @@ At this step we will refactor completely to WebFlux but at the places where it i
 
 1. Remove WebMVC dependency from the service
    > ***Note***: module `commons` may still bring an old WebMVC dependency.
-   > Exclude it from `gateway-service/build.gradle` using 
+   > Exclude it from `gateway-service/build.gradle` using
    >  ```gradle
    >    configurations.implementation  {
    >       exclude group: 'org.springframework.boot', module: 'spring-boot-starter-web'
@@ -144,8 +146,3 @@ At this step we will refactor completely to WebFlux but at the places where it i
         // new impl
       }
    ```
-
-
-
-
-     
